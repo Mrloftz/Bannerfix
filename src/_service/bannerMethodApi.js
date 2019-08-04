@@ -54,9 +54,9 @@ export const getList = async keyword => {
     })
 }
 // uploadBanner
-export const UploadBanner = async () => {
-  await axios
-    .post(base_url + '/banner/uploadBannerImage')
+export const UploadBanner = async body => {
+  return await axios
+    .post(base_url + '/banner/uploadBannerImage', body)
     .then(response => {
       return response
     })
