@@ -1,5 +1,6 @@
 import * as Yup from 'yup'
 import * as moment from 'moment'
+import { file } from '@babel/types'
 
 // export const LoginSchema = Yup.object().shape({
 //   name: Yup.string().required('Required'),
@@ -12,7 +13,7 @@ import * as moment from 'moment'
 
 export const LoginSchema = formValue => {
   let errors = {}
-  const { startdate, enddate, name, link, sortOrder, fileTH, fileENG, testing, lang } = formValue
+  const { startdate, enddate, name, link, sortOrder, fileth, fileen, testing, lang, activeAllLangs, filethPreview, fileenPreview } = formValue
   // input validate
   if (!enddate) {
     // errors.startdate = 'Required'
@@ -30,31 +31,26 @@ export const LoginSchema = formValue => {
     errors.sortOrder = 'Required'
   }
   // upload validate image
-  if (!fileTH) {
-    errors.fileTH = 'Required'
-  } else if (fileTH.type !== 'image/jpeg' && fileTH.type !== 'image/png') {
-    errors.fileTH = 'File not support'
-  } else if (fileTH.fileTH / 1024 / 1024 > 2) {
-    errors.fileTH = 'File size is exceeded'
+  if (!filethPreview) {
+    if (!fileth) {
+      errors.fileth = 'Required'
+    } else if (fileth.type !== 'image/jpeg' && fileth.type !== 'image/png') {
+      errors.fileth = 'File not support'
+    } else if (fileth.size / 1024 / 1024 > 2) {
+      errors.fileth = 'File size is exceeded'
+    }
   }
-  // validate lang
-  //testing: false
-  //lang: [{ TH , ENG}]
-  //langActive: TH
 
-  if (testing !== fileTH || fileENG) {
-    errors.testing = 'กรุณาเลือกทุกภาษา'
+  if (!activeAllLangs) {
+    if (!fileth && !filethPreview) {
+      errors.fileth = 'กรุณาใส่รูปภาพไทย'
+    }
+    if (!fileen && !fileenPreview) {
+      errors.fileen = 'กรุณาใส่รูปภาพภาษาอังกฤษ'
+    }
   }
-  // } else if (testing === fileTH || fileENG) {
-  //   return true
-  // }
-  // if (fileTH !== ) {
-  //   errors.fileTH = 'กรุณาใส่รูปภาพไทย'
-  // }
-  // if (fileENG !== ) {
-  //   errors.fileENG = 'กรุณาใส่รูปภาพอังกฤษ'
-  // }
-  console.log(formValue)
+
+  console.log(errors)
 
   return errors
 }
