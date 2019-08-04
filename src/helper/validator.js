@@ -13,7 +13,7 @@ import { file } from '@babel/types'
 
 export const LoginSchema = formValue => {
   let errors = {}
-  const { startdate, enddate, name, link, sortOrder, fileth, fileen, testing, lang, activeAllLangs, filethPreview, fileenPreview } = formValue
+  const { startdate, enddate, name, link, sortOrder, fileth, fileen, activeAllLangs, filethPreview, fileenPreview } = formValue
   // input validate
   if (!enddate) {
     // errors.startdate = 'Required'
