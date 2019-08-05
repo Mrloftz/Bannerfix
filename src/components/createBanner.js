@@ -5,7 +5,7 @@ import { Button } from 'antd'
 import { LoginSchema } from '../helper/validator'
 import * as moment from 'moment'
 import styled from 'styled-components'
-import { UploadBanner, Getlanguage, GetBanner, DeleteBanner } from '../_service/bannerMethodApi'
+import { UploadBanner, Getlanguage, GetBanner, DeleteBanner, BannerCreate, UpdateBanner } from '../_service/bannerMethodApi'
 import axios from 'axios'
 import { BreadCrumb } from '../components/breadcrum'
 
@@ -33,6 +33,8 @@ export const BannerComponent = props => {
     fetchData()
     const fetchValue = async id => {
       const { data } = await GetBanner(id)
+
+      console.log(data)
       setName(data.data.banner.name)
       setLink(data.data.banner.link)
       setsortOrder(data.data.banner.sortOrder)
@@ -49,6 +51,7 @@ export const BannerComponent = props => {
     }
   }, [CheckParams.id])
   const fileLang = `file${langActive}`
+
   const handleChangeFile = async (formikProps, file) => {
     let isUploadError = false
     const imageFile = file.currentTarget.files[0]
@@ -107,64 +110,35 @@ export const BannerComponent = props => {
           validate={LoginSchema}
           // validationSchema={LoginSchema}
           onSubmit={async formValues => {
-            if (CheckParams.id) {
-              let value = {
-                id: CheckParams.id,
-                name: formValues.name,
-                link: formValues.link,
-                sortOrder: formValues.sortOrder,
-                startTime: moment(formValues.startdate).format('YYYY-MM-DD'),
-                endTime: moment(formValues.enddate).format('YYYY-MM-DD'),
-                sortOrder: formValues.sortOrder,
-                bannerTranslations: [
-                  {
-                    languageId: 2,
-                    imageUrl: formValues.fileenPreview,
-                  },
-                  {
-                    languageId: 5,
-                    imageUrl: formValues.filethPreview,
-                  },
-                ],
-              }
-              await axios
-                .post('http://travizgo.dosetech.co:7788/banner/update', value)
-                .then(res => {
-                  console.log(res)
-                })
-                .catch(error => {
-                  console.log(error)
-                })
-            } else {
-              let data = {
-                name: formValues.name,
-                status: formValues.status,
-                link: formValues.link,
-                sortOrder: formValues.sortOrder,
-                startTime: moment(formValues.startdate).format('YYYY-MM-DD'),
-                endTime: moment(formValues.enddate).format('YYYY-MM-DD'),
-                sortOrder: formValues.sortOrder,
-                bannerTranslations: [
-                  {
-                    languageId: 2,
-                    imageUrl: formValues.fileenPreview,
-                  },
-                  {
-                    languageId: 5,
-                    imageUrl: formValues.filethPreview,
-                  },
-                ],
-              }
-              await axios
-                .post('http://travizgo.dosetech.co:7788/banner/create', data)
-                .then(response => {
-                  console.log(response)
-                })
-                .catch(error => {
-                  console.log(error)
-                })
+            let data = {
+              name: formValues.name,
+              status: formValues.status,
+              link: formValues.link,
+              sortOrder: formValues.sortOrder,
+              startTime: moment(formValues.startdate).format('YYYY-MM-DD'),
+              endTime: moment(formValues.enddate).format('YYYY-MM-DD'),
+              bannerTranslations: [
+                {
+                  // id: 11,
+                  languageId: 2,
+                  imageUrl: formValues.fileenPreview,
+                },
+                {
+                  // id: 12,
+                  languageId: 5,
+                  imageUrl: formValues.filethPreview,
+                },
+              ],
             }
 
+            if (CheckParams.id) {
+              data = { ...data, id: CheckParams.id }
+
+              await UpdateBanner(data)
+            } else {
+              const respone = await BannerCreate(data)
+              console.log(respone)
+            }
             history.push('/')
           }}
           render={props => (
@@ -266,9 +240,9 @@ const ContainerButton = styled.div`
   margin-top: 1rem;
 `
 
-const FieldIn = styled.input`
-  padding: 10px 11px 11px 11px;
-  width: 100%;
-  box-sizing: border-box;
-  max-width: 400px;
-`
+// const FieldIn = styled.input`
+//   padding: 10px 11px 11px 11px;
+//   width: 100%;
+//   box-sizing: border-box;
+//   max-width: 400px;
+// `
