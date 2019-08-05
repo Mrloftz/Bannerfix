@@ -1,6 +1,6 @@
-import * as Yup from 'yup'
+// import * as Yup from 'yup'
 import * as moment from 'moment'
-import { file } from '@babel/types'
+// import { file } from '@babel/types'
 
 // export const LoginSchema = Yup.object().shape({
 //   name: Yup.string().required('Required'),
