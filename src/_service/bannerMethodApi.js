@@ -25,14 +25,14 @@ export const GetBanner = async id => {
 }
 
 // CreateBanner
-export const BannerCreate = async () => {
-  await axios
-    .post(base_url + '/banner/create')
+export const BannerCreate = data => {
+  return axios
+    .post(base_url + '/banner/create', data)
     .then(response => {
-      console.log(response)
+      return response
     })
     .catch(error => {
-      console.log(error)
+      return error
     })
 }
 // getList Search data in table row
@@ -66,9 +66,9 @@ export const UploadBanner = async body => {
 }
 
 // UpdateBanner
-export const UpdateBanner = async () => {
-  await axios
-    .post(base_url + '/banner/update')
+export const UpdateBanner = body => {
+  return axios
+    .post(base_url + '/banner/update', body)
     .then(response => {
       return response
     })
