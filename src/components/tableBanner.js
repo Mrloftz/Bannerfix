@@ -30,7 +30,7 @@ class TableBanner extends React.Component {
         dataIndex: 'imageUrl',
         key: 'imageUrl',
         render: (key, record) => {
-          const mainImage = record.bannerTranslations.find(value => value.languageId === 2 || 5)
+          const mainImage = record.bannerTranslations.find(value => value.languageId === 5)
           return <img src={mainImage ? mainImage.imageUrl : undefined} style={{ width: '100px' }} alt="" />
         },
       },
