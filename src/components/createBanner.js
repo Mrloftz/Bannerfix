@@ -19,8 +19,10 @@ export const BannerComponent = props => {
   const [startdate, setStartDate] = useState(moment())
   const [enddate, setEndDate] = useState()
   const [lastUpdate, setlastUpdate] = useState()
-  const [fileenPreview, setimageUrlth] = useState()
-  const [filethPreview, setimageUrlen] = useState()
+  const [fileenPreview, setimageUrlen] = useState()
+  const [filethPreview, setimageUrlth] = useState()
+  const [imageIden, setimageIden] = useState()
+  const [imageIdth, setimageIdth] = useState()
   const [status, setStatus] = useState(statusMap[0].value)
 
   const CheckParams = props.params
@@ -43,6 +45,8 @@ export const BannerComponent = props => {
       setlastUpdate(data.data.banner.lastUpdate)
       setimageUrlen(data.data.banner.bannerTranslations[0].imageUrl)
       setimageUrlth(data.data.banner.bannerTranslations[1].imageUrl)
+      setimageIden(data.data.banner.bannerTranslations[0].id)
+      setimageIdth(data.data.banner.bannerTranslations[1].id)
       setStatus(data.data.banner.status)
     }
 
@@ -104,6 +108,8 @@ export const BannerComponent = props => {
             enddate,
             fileenPreview,
             filethPreview,
+            imageIden,
+            imageIdth,
             lastUpdate,
           }}
           enableReinitialize={true}
@@ -119,7 +125,7 @@ export const BannerComponent = props => {
               endTime: moment(formValues.enddate).format('YYYY-MM-DD'),
               bannerTranslations: [
                 {
-                  // id: 11,
+                  // id: ,
                   languageId: 2,
                   imageUrl: formValues.fileenPreview,
                 },
@@ -133,12 +139,14 @@ export const BannerComponent = props => {
 
             if (CheckParams.id) {
               data = { ...data, id: CheckParams.id }
-
+              data.bannerTranslations[0].id = imageIden
+              data.bannerTranslations[1].id = imageIdth
               await UpdateBanner(data)
             } else {
               const respone = await BannerCreate(data)
               console.log(respone)
             }
+
             history.push('/')
           }}
           render={props => (
@@ -161,6 +169,7 @@ export const BannerComponent = props => {
                         isActive={langActive === langs.code}
                         onClick={() => !props.values.activeAllLangs && setActive(langs.code)}
                         key={index}
+                        type="button"
                       >
                         {langs.code}
                         {props.errors[`file${langs.code}`] && <div style={{ color: 'red' }}>error</div>}
