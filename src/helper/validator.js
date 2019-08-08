@@ -15,8 +15,8 @@ export const LoginSchema = formValue => {
   let errors = {}
   const { startdate, enddate, name, link, sortOrder, fileth, fileen, activeAllLangs, filethPreview, fileenPreview } = formValue
   // input validate
-  if (!enddate) {
-    // errors.startdate = 'Required'
+  if (!enddate && !startdate) {
+    errors.startdate = 'Required'
     errors.enddate = 'Required'
   } else if (moment(startdate) > moment(enddate)) {
     errors.enddate = 'Invalid date!'

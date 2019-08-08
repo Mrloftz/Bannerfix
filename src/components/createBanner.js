@@ -6,7 +6,7 @@ import { LoginSchema } from '../helper/validator'
 import * as moment from 'moment'
 import styled from 'styled-components'
 import { UploadBanner, Getlanguage, GetBanner, DeleteBanner, BannerCreate, UpdateBanner } from '../_service/bannerMethodApi'
-import axios from 'axios'
+// import axios from 'axios'
 import { BreadCrumb } from '../components/breadcrum'
 
 export const BannerComponent = props => {
@@ -16,7 +16,7 @@ export const BannerComponent = props => {
   const [name, setName] = useState()
   const [link, setLink] = useState()
   const [sortOrder, setsortOrder] = useState()
-  const [startdate, setStartDate] = useState(moment())
+  const [startdate, setStartDate] = useState()
   const [enddate, setEndDate] = useState()
   const [lastUpdate, setlastUpdate] = useState()
   const [fileenPreview, setimageUrlen] = useState()
@@ -27,6 +27,8 @@ export const BannerComponent = props => {
 
   const CheckParams = props.params
   const { history } = props
+
+
   useEffect(() => {
     const fetchData = async () => {
       const langs = await Getlanguage()
@@ -35,8 +37,6 @@ export const BannerComponent = props => {
     fetchData()
     const fetchValue = async id => {
       const { data } = await GetBanner(id)
-
-      console.log(data)
       setName(data.data.banner.name)
       setLink(data.data.banner.link)
       setsortOrder(data.data.banner.sortOrder)
@@ -79,7 +79,7 @@ export const BannerComponent = props => {
         const imageUrl = result.data.data.imageUrl
         console.log(imageUrl)
         formikProps.setFieldValue(`${fileLang}Preview`, imageUrl)
-      } catch (e) {}
+      } catch (e) { }
     }
   }
 
@@ -141,10 +141,11 @@ export const BannerComponent = props => {
               data = { ...data, id: CheckParams.id }
               data.bannerTranslations[0].id = imageIden
               data.bannerTranslations[1].id = imageIdth
-              await UpdateBanner(data)
+              const responUpdate = await UpdateBanner(data)
+              console.log(responUpdate)
             } else {
-              const respone = await BannerCreate(data)
-              console.log(respone)
+              const responeCreate = await BannerCreate(data)
+              console.log(responeCreate)
             }
 
             history.push('/')
@@ -152,16 +153,22 @@ export const BannerComponent = props => {
           render={props => (
             <form onSubmit={props.handleSubmit}>
               <LanguageContainer>
-                {!CheckParams.id && <h1>Create Banner</h1>}
-                {CheckParams.id && <h1>Edit Banner</h1>}
-                <BreadCrumb />
-                <Field
-                  name="activeAllLangs"
-                  component={FieldCheckboxInput}
-                  value={props.values.testing}
-                  onChange={e => onChangeActiveAllLangs(props, e)}
-                  checkbox_text={'ใช้กับทุกภาษา'}
-                />
+                <div>
+                  {!CheckParams.id && <h1 style={{ margin: 0 }}>Create Banner</h1>}
+                  {CheckParams.id && <h1 style={{ margin: 0 }}>Edit Banner</h1>}
+                  <TextForm>
+                    <BreadCrumb />
+                  </TextForm>
+                  <TextForm>
+                    <Field
+                      name="activeAllLangs"
+                      component={FieldCheckboxInput}
+                      value={props.values.testing}
+                      onChange={e => onChangeActiveAllLangs(props, e)}
+                      checkbox_text={'ใช้กับทุกภาษา'}
+                    />
+                  </TextForm>
+                </div>
                 <div>
                   {langs.map((langs, index) => {
                     return (
@@ -178,7 +185,7 @@ export const BannerComponent = props => {
                   })}
                 </div>
               </LanguageContainer>
-              <div>Name</div>
+              <TextForm >Name</TextForm>
               <Field
                 name="name"
                 component={FieldInput}
@@ -187,11 +194,11 @@ export const BannerComponent = props => {
                 placeholder="Name"
                 format="YYYY-MM-DD"
               />
-              <div>URL</div>
+              <TextForm>URL</TextForm>
               <Field name="link" component={FieldInput} value={props.values.link} onChange={props.handleChange} placeholder="Link" />
-              <div>Sort Order</div>
+              <TextForm>Sort Order</TextForm>
               <Field name="sortOrder" component={FieldInput} value={props.values.sortOrder} onChange={props.handleChange} placeholder="SortOrder" />
-              <div>Start Date</div>
+              <TextForm>Start Date</TextForm>
               <Field
                 name="startdate"
                 component={FieldInputDatePicker}
@@ -199,7 +206,7 @@ export const BannerComponent = props => {
                 onChange={e => props.setFieldValue('startdate', e)}
                 placeholder="Start Date"
               />
-              <div>End Date</div>
+              <TextForm>End Date</TextForm>
               <Field
                 name="enddate"
                 component={FieldInputDatePicker}
@@ -207,10 +214,13 @@ export const BannerComponent = props => {
                 onChange={e => props.setFieldValue('enddate', e)}
                 placeholder="End Date"
               />
-              <div>File</div>
+              <TextForm>File</TextForm>
               <Field name={fileLang} component={FieldFileInput} value={''} onChange={e => handleChangeFile(props, e)} placeholder={fileLang} />
-              <img alt="" style={{ width: '25%' }} src={props.values[`${fileLang}Preview`]} />
-              <div>Status</div>
+              <TextForm>
+                <img alt="" style={{ width: '25%' }} src={props.values[`${fileLang}Preview`]} />
+              </TextForm>
+
+              <TextForm>Status</TextForm>
               <Field name="status" component={FieldRadioInput} value={props.values.status} onChange={props.handleChange} data={statusMap} />
               <ContainerButton>
                 <Button type="danger" onClick={() => DeleteBanner(CheckParams.id)}>
@@ -248,7 +258,9 @@ const ContainerButton = styled.div`
   display: flex;
   margin-top: 1rem;
 `
-
+const TextForm = styled.div`
+  margin-top: 1rem;
+`
 // const FieldIn = styled.input`
 //   padding: 10px 11px 11px 11px;
 //   width: 100%;
