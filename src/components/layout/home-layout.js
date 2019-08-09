@@ -1,10 +1,13 @@
 import React from 'react'
 import Header from '../header/header'
+import SideBar from '../sidebar/sidebar';
 
-export const HomeLayout = ({ children }) => {
+export const HomeLayout  = ({ children }) => {
+
   return (
     <React.Fragment>
-      <Header />
+      {/* <Header /> */}
+      <SideBar/>
       {children}
     </React.Fragment>
   )

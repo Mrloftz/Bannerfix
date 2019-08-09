@@ -6,7 +6,6 @@ import { LoginSchema } from '../helper/validator'
 import * as moment from 'moment'
 import styled from 'styled-components'
 import { UploadBanner, Getlanguage, GetBanner, DeleteBanner, BannerCreate, UpdateBanner } from '../_service/bannerMethodApi'
-// import axios from 'axios'
 import { BreadCrumb } from '../components/breadcrum'
 
 export const BannerComponent = props => {
