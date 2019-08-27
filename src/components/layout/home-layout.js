@@ -6,8 +6,8 @@ export const HomeLayout  = ({ children }) => {
 
   return (
     <React.Fragment>
-      {/* <Header /> */}
-      <SideBar/>
+      <Header />           
+      {/* <SideBar/> */}
       {children}
     </React.Fragment>
   )

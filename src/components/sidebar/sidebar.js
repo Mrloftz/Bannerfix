@@ -2,7 +2,7 @@ import React from 'react'
 import './index.css'
 import Header from '../header/header'
 import styled from 'styled-components'
-import TableBanner from '../tableBanner';
+import TableBanner from '../banner/table/tableBanner';
 class SideBar extends React.Component {
     constructor() {
         super()
